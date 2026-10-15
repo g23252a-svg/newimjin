@@ -1,0 +1,262 @@
+{
+ "runs": 300,
+ "attempted": 300,
+ "seconds": 147.4,
+ "finishRate": 22.3,
+ "deathCumByAct": {
+  "1": 3.7,
+  "2": 19.7,
+  "3": 36.7,
+  "4": 38.3,
+  "5": 52.3,
+  "6": 67,
+  "7": 77.7
+ },
+ "deathsByAct": {
+  "1": 11,
+  "2": 48,
+  "3": 51,
+  "4": 5,
+  "5": 42,
+  "6": 44,
+  "7": 32
+ },
+ "endings": {
+  "nanse": 233,
+  "silrok": 20,
+  "jingbi": 47
+ },
+ "avgScore": 1236,
+ "avgBattleTurnsByAct": {
+  "1": 4.9,
+  "2": 4,
+  "3": 4.7,
+  "4": 4.3,
+  "5": 4.5,
+  "6": 5.3,
+  "7": 5.1
+ },
+ "hpPctAtActEnd": {
+  "1": 48,
+  "2": 42,
+  "3": 23,
+  "4": 49,
+  "5": 25,
+  "6": 39
+ },
+ "pushesPerBattle": 1.4,
+ "distShare": {
+  "far": 19.1,
+  "near": 19.4,
+  "close": 61.5
+ },
+ "edictUseRate": 1.5,
+ "rescueRate": 52.7,
+ "turnCapBattles": 1,
+ "intent": {
+  "ok": 12288,
+  "bad": 0
+ },
+ "deadlocks": 0,
+ "consoleErrors": 0,
+ "branch": {
+  "b1": {
+   "fort": 101,
+   "ridge": 104,
+   "river": 94
+  },
+  "lane2": {
+   "land": 144,
+   "sea": 145
+  },
+  "dismissed": 0,
+  "chilcheon": 0,
+  "dokjeon": 23,
+  "reachedAct5": 185,
+  "reachedAct7": 99
+ },
+ "pickRateLow": [
+  [
+   "bamboo_spear",
+   5.3,
+   133
+  ],
+  [
+   "manifesto",
+   6.9,
+   116
+  ],
+  [
+   "monk_soldiers",
+   7,
+   128
+  ],
+  [
+   "ambush_fire",
+   7.1,
+   140
+  ],
+  [
+   "fire_arrow",
+   7.2,
+   235
+  ],
+  [
+   "people_stones",
+   7.6,
+   132
+  ],
+  [
+   "mountain_raid",
+   7.9,
+   140
+  ],
+  [
+   "pyeonjeon",
+   8.6,
+   304
+  ],
+  [
+   "whip",
+   8.6,
+   301
+  ],
+  [
+   "seungja",
+   8.7,
+   230
+  ],
+  [
+   "ash_bag",
+   9.2,
+   336
+  ],
+  [
+   "cavalry_charge",
+   9.2,
+   293
+  ]
+ ],
+ "pickRateHigh": [
+  [
+   "twelve_ships",
+   90.3,
+   267
+  ],
+  [
+   "pilsa_jeuksaeng",
+   100,
+   100
+  ],
+  [
+   "sinsang_pilbeol",
+   100,
+   112
+  ],
+  [
+   "die_standing",
+   100,
+   63
+  ],
+  [
+   "danghangpo_lure",
+   100,
+   116
+  ],
+  [
+   "not_one_ship",
+   100,
+   75
+  ],
+  [
+   "hwacha_volley",
+   100,
+   61
+  ],
+  [
+   "sema",
+   444.3,
+   70
+  ]
+ ],
+ "useRateLow": [
+  [
+   "edict_arrest",
+   0
+  ],
+  [
+   "rowers",
+   0.2
+  ],
+  [
+   "edict_advance",
+   0.6
+  ],
+  [
+   "jochong",
+   2.1
+  ],
+  [
+   "jincheonroe",
+   4
+  ],
+  [
+   "ongseong",
+   6.8
+  ],
+  [
+   "desperate_call",
+   7.7
+  ],
+  [
+   "memorial",
+   8.1
+  ],
+  [
+   "scorched_earth",
+   12.5
+  ],
+  [
+   "mountain_fort",
+   13
+  ]
+ ],
+ "neverOffered": [],
+ "encounters": [
+  "1막 tut_busan         n 300 손실   0 사망   0% 턴2.0",
+  "1막 tut_sangju        n 259 손실  17 사망   0% 턴4.7",
+  "1막 boss_konishi      n 299 손실  30 사망   3% 턴8.7",
+  "1막 dongnae_hold      n  96 손실   0 사망   0% 턴3.4",
+  "2막 jeongam           n 144 손실  12 사망   0% 턴3.5",
+  "2막 gyeongju          n  59 손실  12 사망   0% 턴3.5",
+  "2막 boss_jinju1       n 142 손실  19 사망  15% 턴5.3",
+  "2막 okpo              n 145 손실  10 사망   1% 턴3.7",
+  "2막 dangpo            n  84 손실   7 사망   7% 턴3.3",
+  "2막 gyeonnaeryang     n 135 손실   4 사망   1% 턴2.9",
+  "2막 boss_wakizaka     n 134 손실  21 사망  10% 턴5.6",
+  "2막 danghangpo_elite  n  59 손실  33 사망   3% 턴5.8",
+  "2막 yulpo             n 112 손실  10 사망   0% 턴3.6",
+  "2막 cheongju_elite    n  44 손실   4 사망   0% 턴2.5",
+  "2막 ichi_hold         n  29 손실   1 사망   0% 턴2.6",
+  "2막 geumsan_elite     n  19 손실  29 사망  11% 턴4.1",
+  "3막 pyongyang         n 241 손실   2 사망   0% 턴1.8",
+  "3막 byeokje_elite     n  83 손실  21 사망   0% 턴3.9",
+  "3막 doksan            n 241 손실   1 사망   0% 턴2.8",
+  "3막 boss_haengju      n 241 손실  42 사망  21% 턴9.8",
+  "3막 hanseong_pursuit  n   5 손실  15 사망   0% 턴3.0",
+  "4막 yoshira_naval     n  74 손실  15 사망   3% 턴3.9",
+  "4막 monghak_elite     n  64 손실  22 사망   5% 턴4.8",
+  "5막 busan_sea         n 185 손실  31 사망   8% 턴4.7",
+  "5막 hwangseoksan      n 120 손실   1 사망   0% 턴3.1",
+  "5막 boss_jiksan       n 171 손실  42 사망  16% 턴5.6",
+  "5막 namwon            n  51 손실   1 사망   0% 턴3.0",
+  "5막 unbong            n   2 손실  13 사망   0% 턴4.5",
+  "6막 eoranpo           n 143 손실  21 사망   4% 턴4.6",
+  "6막 boss_myeongnyang  n 137 손실  37 사망  28% 턴6.1",
+  "7막 ulsan             n  99 손실  27 사망   2% 턴4.2",
+  "7막 boss_noryang      n  95 손실  31 사망  29% 턴6.5",
+  "7막 suncheon          n  18 손실  21 사망   0% 턴3.8",
+  "7막 sacheon           n   4 손실  58 사망  50% 턴3.5"
+ ],
+ "exceptions": []
+}

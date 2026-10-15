@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" data-slug="jingbi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0a08">
+<title>징비 — 일곱 해의 패</title>
+<style>
+  html,body{margin:0;padding:0;background:#0b0a08;height:100%;overflow:hidden;
+    font-family:"Nanum Myeongjo","Batang","AppleMyungjo","Malgun Gothic",serif;
+    -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+    -webkit-touch-callout:none;touch-action:none;overscroll-behavior:none;}
+  #wrap{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);transform-origin:50% 50%;}
+  canvas{display:block;image-rendering:auto;box-shadow:0 0 60px rgba(0,0,0,.9);background:#0b0a08;}
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="cv" width="1280" height="720"></canvas></div>
+<script src="src/00_core.js"></script>
+<script src="src/01_text.js"></script>
+<script src="src/02_cards.js"></script>
+<script src="src/03_enemies.js"></script>
+<script src="src/04_generals.js"></script>
+<script src="src/05_events.js"></script>
+<script src="src/06_map.js"></script>
+<script src="src/07_combat.js"></script>
+<script src="src/08_run.js"></script>
+<script src="src/09_input.js"></script>
+<script src="src/10_audio.js"></script>
+<script src="src/10b_art.js"></script>
+<script src="src/11_ui_battle.js"></script>
+<script src="src/12_ui_screens.js"></script>
+<script src="src/13_main.js"></script>
+<script>Main.start();</script>
+</body>
+</html>
