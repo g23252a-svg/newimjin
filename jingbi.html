@@ -8822,6 +8822,8 @@ var UIScreens = (function () { 'use strict';
     var x0 = (W - (per * cw + (per - 1) * gap)) / 2, top = opts.top || 110, viewH = opts.viewH || 500;
     var rows = Math.ceil(list.length / per), maxS = Math.max(0, rows * (ch + gap + (opts.priceRow ? 26 : 0)) - viewH);
     U.scroll = Math.max(0, Math.min(maxS, U.scroll));
+    // 스크롤 영역은 카드보다 먼저 등록한다. 입력은 나중에 등록한 영역이 먼저 받으므로, 뒤에 두면 카드 누름을 가로챈다
+    Input.zone({ id: (opts.id || 'grid') + 'Scroll', x: 0, y: top - 14, w: W, h: viewH + 14, wheel: function (d) { U.scroll += d; }, drag: function (p, dx, dy) { U.scroll -= dy; } });
     c.save(); c.beginPath(); c.rect(0, top - 14, W, viewH + 14); c.clip();
     var hovered = null;
     list.forEach(function (it, i) {
@@ -8835,10 +8837,9 @@ var UIScreens = (function () { 'use strict';
         gx.txt(c, it.sold ? ui('sold', '팔렸다') : String(it.price), x + cw / 2 + 6, y + ch + 15, { size: 13, align: 'center', base: 'middle', weight: 'bold' });
       }
       if (hov) hovered = { it: it, x: x, y: y };
-      Input.zone({ id: (opts.id || 'grid') + i, x: x, y: y, w: cw, h: ch, tap: opts.tap ? function () { opts.tap(i); } : null, long: function () { U.detail = it; } });
+      Input.zone({ id: (opts.id || 'grid') + i, x: x, y: y, w: cw, h: ch, tap: opts.tap ? function () { opts.tap(i); } : null, long: function () { U.detail = it; }, drag: function (p, dx, dy) { U.scroll -= dy; } });
     });
     c.restore();
-    Input.zone({ id: (opts.id || 'grid') + 'Scroll', x: 0, y: top - 14, w: W, h: viewH + 14, wheel: function (d) { U.scroll += d; }, drag: function (p, dx, dy) { U.scroll -= dy; } });
     var di = hovered && !Input.isTouch ? hovered.it : U.detail;
     if (di && opts.detail !== false) {
       var bx = hovered ? hovered.x + cw + 10 : W / 2 - 175;
