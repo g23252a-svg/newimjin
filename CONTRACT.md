@@ -199,7 +199,7 @@ op `cond`의 `if`, 훅의 `cond`, 사건·노드 `variants[].if`, 선택지 `if`
 { kind:'approach', text:'접근' }                  // pull 1 (melee가 遠에서 자동 변환되는 것과 같음)
 { kind:'pull', n, text:'전진' }                   // 무리 전체 n칸
 { kind:'block', n, text:'밀집' }                  // 자기 진형
-{ kind:'load', text:'裝' }                        // 표시 전용
+{ kind:'load', text:'장전' }                       // 표시 전용
 { kind:'rally', n, who?:'all'|'self', text }      // 기세 +n (기본 all)
 { kind:'build', text:'쌓기' }                     // 토산. buildCount 3회 뒤 intents 를 [{kind:'atk', n:8, tag:'bow', ignoreWall:true, text:'토산 사격'}] 로 교체
 { kind:'reinforce', id, n, cap, text:'증원' }      // §5.2 증원 규칙
@@ -230,7 +230,7 @@ ENEMIES.build(encId, act, rng, overrides?) → { type, enemies:[enemyInst…], w
 **결전 적 ID**: `konishi` · `wakizaka` · `hosokawa`(진주 1차 왜장) · `ukita_w1` `ukita_w2` `ukita_w3` · `kuroda` · `todo` · `kurushima` · `shimazu_p1` · `shimazu_p2`.
 **편성 ID**: 결전 `boss_konishi` `boss_wakizaka` `boss_jinju1` `boss_haengju` `boss_jiksan` `boss_myeongnyang` `boss_noryang`; 고정 `tut_busan` `tut_gijang` `tut_sangju` `dongnae_hold` `ichi_hold` `jeongam` `cheongju_elite` `geumsan_elite` `yeonan` `gyeongju` `okpo` `dangpo` `danghangpo_elite` `yulpo` `gyeonnaeryang` `pyongyang` `byeokje_elite` `doksan` `hanseong_pursuit` `monghak_elite` `yoshira_naval` `busan_sea` `namwon` `hwangseoksan` `unbong` `eoranpo` `ulsan` `sacheon` `suncheon`; 풀 일반 편성은 `p{막}{_sea|_land}_{a,b,c…}` (예 `p1_a`, `p2_sea_b`).
 
-**적 표현 지침(동결)**: 기마 무사 `{kind:'atk', n:12, tag:'melee', pullFirst:2, text:'돌격'}` · 구로다 `{kind:'atk', n:18, tag:'melee', pullFirst:2, text:'기병 돌격'}` · 왜성 수비대 `{kind:'atk', n:9, tag:'melee', text:'돌출', alt:{if:{distNot:2}, n:10, tag:'gun', text:'조총'}}` · 무사 기합 `{kind:'rally', n:2, who:'self', text:'기합'}` · 조총 `{kind:'atk', n:14, tag:'gun', pierce:0.5, text:'發'}`(앞에 load 둘) · `boss_wakizaka.handlers=[{hook:'onCardPlayed', cond:{cardId:'crane_wing', dist:0}, ops:[{op:'fx', kind:'banner', key:'crane'}, {op:'status', who:'enemy', enemyId:'wakizaka', id:'shaken', n:2}]}]` · `boss_myeongnyang.handlers=[{hook:'onEnemyDeath', cond:{enemyId:'kurushima'}, ops:[{op:'status', who:'all', id:'shaken', n:3}, {op:'fx', kind:'banner', key:'kurushima'}]}]`, `mods:{tide:true}`, `reinforce:{every:3, enemies:['sekibune','sekibune'], cap:8}` · `boss_noryang.waves=[{enemies:[{id:'shimazu_p1'},{id:'sekibune'},{id:'sekibune'}], trigger:{enemyDead:'shimazu_p1'}, keepOthers:true}, {enemies:[{id:'shimazu_p2'}], resetDist:1, extraDraw:0, mods:{pushMax:1, rescueDisabled:true}, reinforce:{every:2, enemies:['sekibune','sekibune'], cap:6}, onStart:[{op:'addCard', id:'chen_lin_bombard', where:'hand', free:true, generated:true}, {op:'addCard', id:'deng_zilong', where:'hand', free:true, generated:true}, {op:'addCard', id:'ming_navy_square', where:'hand', free:true, generated:true}]}]` · `boss_haengju.waves` 3개(`resetDist:1, extraDraw:3`, 파3 `onStart:[{op:'addCard', id:'bowstring', n:2, where:'hand', generated:true}, {op:'fx', kind:'banner', key:'arrows'}]`) · `boss_jiksan.mods.startHand=[{id:'li_cavalry', free:true},{id:'folangji', free:true},{id:'nambyeong_cannon', free:true}]` · 평양 `startHand` 명군 2장 free · 남원 `startHand:[{id:'folangji', free:true}]` · `tut_busan.mods={noAdvanceTurns:2, tutorial:'far'}`, `tut_gijang.mods={tutorial:'near'}`, `tut_sangju.mods={startDist:2, tutorial:'close'}` · 결전 reward: wakizaka `{relic:'hansan_drum'}`, jinju1 `{relic:'jinju_drum', ops:[{op:'flag', key:'jinju1_held', value:true}]}`, haengju `{relic:'haengju_ash'}`, jiksan `{relic:'jiksan_spear'}`, myeongnyang `{relic:'myeongnyang_chain'}`, konishi는 Run이 `b1`로 정한다(§6.8).
+**적 표현 지침(동결)**: 기마 무사 `{kind:'atk', n:12, tag:'melee', pullFirst:2, text:'돌격'}` · 구로다 `{kind:'atk', n:18, tag:'melee', pullFirst:2, text:'기병 돌격'}` · 왜성 수비대 `{kind:'atk', n:9, tag:'melee', text:'돌출', alt:{if:{distNot:2}, n:10, tag:'gun', text:'조총'}}` · 무사 기합 `{kind:'rally', n:2, who:'self', text:'기합'}` · 조총 `{kind:'atk', n:14, tag:'gun', pierce:0.5, text:'조총 사격'}`(앞에 load 둘) · `boss_wakizaka.handlers=[{hook:'onCardPlayed', cond:{cardId:'crane_wing', dist:0}, ops:[{op:'fx', kind:'banner', key:'crane'}, {op:'status', who:'enemy', enemyId:'wakizaka', id:'shaken', n:2}]}]` · `boss_myeongnyang.handlers=[{hook:'onEnemyDeath', cond:{enemyId:'kurushima'}, ops:[{op:'status', who:'all', id:'shaken', n:3}, {op:'fx', kind:'banner', key:'kurushima'}]}]`, `mods:{tide:true}`, `reinforce:{every:3, enemies:['sekibune','sekibune'], cap:8}` · `boss_noryang.waves=[{enemies:[{id:'shimazu_p1'},{id:'sekibune'},{id:'sekibune'}], trigger:{enemyDead:'shimazu_p1'}, keepOthers:true}, {enemies:[{id:'shimazu_p2'}], resetDist:1, extraDraw:0, mods:{pushMax:1, rescueDisabled:true}, reinforce:{every:2, enemies:['sekibune','sekibune'], cap:6}, onStart:[{op:'addCard', id:'chen_lin_bombard', where:'hand', free:true, generated:true}, {op:'addCard', id:'deng_zilong', where:'hand', free:true, generated:true}, {op:'addCard', id:'ming_navy_square', where:'hand', free:true, generated:true}]}]` · `boss_haengju.waves` 3개(`resetDist:1, extraDraw:3`, 파3 `onStart:[{op:'addCard', id:'bowstring', n:2, where:'hand', generated:true}, {op:'fx', kind:'banner', key:'arrows'}]`) · `boss_jiksan.mods.startHand=[{id:'li_cavalry', free:true},{id:'folangji', free:true},{id:'nambyeong_cannon', free:true}]` · 평양 `startHand` 명군 2장 free · 남원 `startHand:[{id:'folangji', free:true}]` · `tut_busan.mods={noAdvanceTurns:2, tutorial:'far'}`, `tut_gijang.mods={tutorial:'near'}`, `tut_sangju.mods={startDist:2, tutorial:'close'}` · 결전 reward: wakizaka `{relic:'hansan_drum'}`, jinju1 `{relic:'jinju_drum', ops:[{op:'flag', key:'jinju1_held', value:true}]}`, haengju `{relic:'haengju_ash'}`, jiksan `{relic:'jiksan_spear'}`, myeongnyang `{relic:'myeongnyang_chain'}`, konishi는 Run이 `b1`로 정한다(§6.8).
 
 ### 3.4 장수·기물 (`GENERALS`)
 
@@ -390,7 +390,7 @@ Combat.choose(st, idxs) → { ok, reason? }      // st.choice.candidates 의 인
 Combat.endTurn(st) → { ok, reason? }           // §5.2 → 다음 턴 시작. phase 'player'|'rescue'|'done'
 Combat.chooseRescue(st, deputyId) → { ok, reason? }   // phase 'rescue' 에서. 재개 §5.7
 Combat.preview(st, handIdx, targetIdx|null) → { lines:[{label, base, final, note}], perEnemy:[n|null…], distAfter, blockAfter }
-Combat.intentPreview(st) → [ { enemyIdx, kind, text, dmg:n|null, raw:n|null, pierce:bool, nextDist:n|null, mark:'裝'|'發'|'貫'|null } ]
+Combat.intentPreview(st) → [ { enemyIdx, kind, text, dmg:n|null, raw:n|null, pierce:bool, nextDist:n|null, mark:'load'|'fire'|'pierce'|null } ]   // mark 는 그림 키(한자 아님): 장전·조총 사격·관통
 Combat.result(st) → BattleResult               // phase 'done' 에서
 Combat.applyOps(st, ops, ctx)                  // 내보냄(테스트·기물)
 Combat.evalCond(st, cond, ctx) → bool
@@ -515,11 +515,11 @@ G = { ver, seed, rng:{s}, uidCounter, leader, act, nodeId:null, col:0, path:[nod
 |---|---|---|
 | `map` | `{act, actInfo, nodes:[{…node, state:'done'|'current'|'open'|'closed'}], reachable:[id…], path}` | `{nodeId}` |
 | `battle` | `{req, node, onWin:[ops]|null, onLose:'nanse'|'continue', reward:bool}` | `{result:BattleResult}` — UI/봇이 Combat을 돌리고 결과를 돌려준다 |
-| `event` | `{eventId, title, text:[…], choices:[{text, enabled, reason, preview, hidden}], node?}` | `{choice:i}` |
+| `event` | `{eventId, title, text:[…], choices:[{text, enabled, reason, preview, hidden}], node?, date, place}` — `date`·`place`는 변형(variant)을 적용한 뒤의 그 마디 날짜·이름, 사건이 그 마디 것이 아니면 `null` | `{choice:i}` |
 | `shop` | `{cards:[{card, price, sold}], relics:[{relic, price, sold}], removePrice, removeUsed, ration}` | `{buy:'card', idx}` / `{buy:'relic', idx}` / `{remove:uid}` / `{leave:true}` (떠날 때까지 같은 프롬프트) |
 | `camp` | `{options:[{id:'rest'|'train'|'farm', text, enabled, preview}]}` | `{pick:id}` (`train`이면 이어서 `pickCard`) |
 | `court` | `{options:[{id:'report'|'recruit'|'request', text, enabled, reason, preview}], recruits:[{general, slotFull}], mingCards:[card…]|null}` | `{pick:'report'}` / `{pick:'recruit', id}` / `{pick:'request', cardId}` |
-| `reward` | `{cards:[card…], relic:relic|null, ration:n, skipBonus:5, elite, boss}` | `{cardIdx:i|null}` |
+| `reward` | `{cards:[card…], relic:relic|null, ration:n, skipBonus:5, elite, boss, bonusRation:n, bonusText:str}` — `bonusRation`은 결전 보상 분기의 군량 op 합(음수 가능, 없으면 0), `bonusText`는 짧은 한국어 이유(없으면 `''`). 이 군량은 **보상을 만들 때 이미 적용**되어 화면에 보이는 값 = 실제로 얻는 값 | `{cardIdx:i|null}` |
 | `merit` | `{slots:['leader','king'(,'ming')], total:10, defaults:{…}}` | `{alloc:{leader,king,ming}}` (합 10) |
 | `pickCard` | `{reason:'upgrade'|'remove'|'offer'|'train', n, candidates:[{uid?, id, up, card}], canSkip}` | `{picks:[idx…]}` (`canSkip`이면 `[]` 허용) |
 | `pickGeneral` | `{reason:'replace'|'optional', candidates:[{general}], incoming:general}` | `{id}` 또는 `{id:null}`(거절) |
@@ -579,7 +579,8 @@ Main.settings = { volume:0.7, fast:false, shake:true, captions:true, mute:false 
 Main.setSetting(key, value)  // settings[key]=value → Core.save(SETTINGS_KEY) → volume|mute면 Audio_.setVolume/mute
 Main.newSeed() → number      // Core.hash(String(Date.now()) + Math.random())  — 13_main 만 Date/Math.random 허용
 Main.time                    // ms 누적 (UI 연출용. 로직은 쓰지 않음)
-Main.debug = { newRun(leader, seed), answer(a), state(), goto(act, col), winBattle(), skipBattle(), setHp(n), setSusp(n), give(cardId), relic(id) }
+Main.debug = { newRun(leader, seed), answer(a), state(), goto(act, col), winBattle(), loseBattle(), skipBattle(), winBattleHold(), loseBattleHold(), lastError(), point(x, y), setHp(n), setSusp(n), give(cardId), relic(id), scene(), tick(n, dt) }
+// winBattleHold/loseBattleHold: UIBattle.debugEnd(win, false, true) — 끝 상태를 만들되 끝내지 않아 승패 화면을 사진으로 찍을 수 있다. point(x,y): Input.debugPoint 로 마우스를 고정(hover 사진용), 인자 없으면 푼다. lastError(): 화면에는 짧은 안내만 띄운 오류의 자세한 내용
 // window.__J = {Core, TXT, CARDS, ENEMIES, GENERALS, EVENTS, MAPDATA, Combat, Run, Input, Audio_, UIBattle, UIScreens, Main}
 ```
 루프: `requestAnimationFrame` → `dt(≤48ms)` → `Input.begin()` → 씬 `update(dt)` → `draw(ctx)` → `Input.end()`. 세로 폰: 제1부 방식(`imjin-rpg/imjin-part1.html` 70~120행 `screenToCanvas`, 4813~4831행 `resize`) — `#wrap`을 CSS `rotate(90deg)`, `VIEW.rot=90`, 좌표 변환은 `Input.toCanvas`. `run` 씬: `Run.current().kind==='battle'`이면 `Main.go('battle', {req})` → `UIBattle.start(req, result => { Run.answer({result}); Main.go('run'); })`; 그 밖은 `UIScreens.draw(ctx, dt, prompt)`; `G.done`이면 제목. 로드 직후 `prompt.kind==='battle'`이면 바로 battle. 음악: title/map → 'map', battle → 'battle', ending → 'ending'. `window.onerror`로 예외를 화면 하단에 작게 표시(게임은 멈추지 않는다). `M` 음소거.
@@ -607,7 +608,16 @@ UIBattle.start(req, onDone(result))      // 큐 초기화 → bus 'fx' 구독 �
 UIBattle.update(dt) / UIBattle.draw(ctx) / UIBattle.stop()   // stop 에서 구독 해제
 UIBattle.view                            // 표시용 복사. fx 의 after 값으로만 바뀌고, 큐가 비면 st 와 재동기화
 ```
-규칙: 상태 전이는 즉시(`Combat.play/endTurn`), 연출은 큐(각 ≤ `FX_MS`, `Main.settings.fast`면 즉시 비움). 큐가 비기 전에도 입력은 받되 다음 `endTurn`은 큐가 빌 때까지(최대 `FX_WAIT_MAX_MS`) 기다린다. 좌표·영역은 DESIGN §7.1. 적이 5~6체면 폭을 줄여(85px) 한 줄에 그린다. 카드 톡→대상 톡, 길게 → 전문+적용 수치(`Combat.preview`). 적 머리 위 `intentPreview`(`raw`를 「發 14」, `dmg`를 실제 받을 피해로 함께). 1막 자막(`req.mods.tutorial` → `TXT.tutorial`). 결전 도입은 그리지 않는다(Run이 scroll로). `phase==='rescue'`면 부장 선택 창(5초 자동 첫째). `phase==='choose'`면 후보 강조 선택 창. `inst.marked`는 카드에 「裝」. 끝나면 1초 뒤(fast면 즉시) `onDone(Combat.result(st))`.
+규칙: 상태 전이는 즉시(`Combat.play/endTurn`), 연출은 큐(각 ≤ `FX_MS`, `Main.settings.fast`면 즉시 비움). 큐가 비기 전에도 입력은 받되 다음 `endTurn`은 큐가 빌 때까지(최대 `FX_WAIT_MAX_MS`) 기다린다. 좌표·영역은 DESIGN §7.1. 적이 5~6체면 폭을 줄여(85px) 한 줄에 그린다. 카드 톡→대상 톡, 길게 → 전문+적용 수치(`Combat.preview`). 적 머리 위 `intentPreview`(`mark==='fire'`면 조총 그림과 `raw`, `dmg`를 실제 받을 피해로 함께. `pierce`는 방패를 뚫는 화살 그림, 글 ‘관통’은 설명 창에만). 1막 자막(`req.mods.tutorial` → `TXT.tutorial`). 결전 도입은 그리지 않는다(Run이 scroll로). `phase==='rescue'`면 부장 선택 창(5초 자동 첫째). `phase==='choose'`면 후보 강조 선택 창. `inst.marked`는 카드에 장전 표시(그림). 끝나면 1초 뒤(fast면 즉시) `onDone(Combat.result(st))`. 전투가 끝나면 화면을 어둡게 하고 그 자리의 주장만 `win`(이기면, 결전이면 ‘결전 승리!’) 또는 `down`(지면) 자세로 다시 그린다. 둘째 주장을 겹쳐 그리지 않는다. 해전이면 `ART.enemy(…, {naval:true})`.
+```js
+UIBattle.debugEnd(win, skip?, hold?)     // hold=true: 끝 상태만 만들고 onDone 을 부르지 않는다(승패 화면 사진용). Main.debug.winBattleHold()/loseBattleHold()
+UIBattle.selfTest()                      // gfx.clean 단위 시험 + 카드·적 이름이 clean 뒤 빈 글이 되지 않는지
+UIBattle.gfx = { C, F, FONT, SERIF, clean, rr, txt, wrap, para, paper, panel, scrollPanel, seal, button, drawCard, cardInfoBox, tooltip, bar, leaderChar, TYPE_KR, dancheong, typePill, PILE_NAME }
+// clean(s): 남은 「」『』 → ‘’, 〔〕 삭제, 영어 꼬리표 ‘(shot)’ ‘(gun·bow)’ 삭제, 한자(확장 A·B·호환·부수)와 가나 삭제, 지우고 남은 빈 괄호·문장부호 정리. txt/para 가 모든 글에 부른다
+// panel(c, x, y, w, h, o): 기본이 단청 판(짙은 청록·남색 나무, 금테, 위쪽 안에 녹·적·백·청 단청 띠). o.stripe:false 면 띠 없음(높이 44 미만도 없음)
+// scrollPanel: 금테 두른 한지 카드(두루마리 막대·붉은 꼭지 없음). button(c, o): o.primary(붉은 — 턴 종료·위험) · o.green · o.teal
+// C 에 teal·navy(와 단청 띠 색) 추가. F(px, weight?, serif?) = 글꼴 문자열
+```
 
 ### 7.4 `UIScreens` (`12_ui_screens.js`)
 ```js
@@ -628,13 +638,15 @@ Audio_.setVolume(v) / Audio_.mute(bool)
 ### 7.6 `TXT` (`01_text.js`) — UI·Run이 부르는 이름
 ```js
 TXT.title='징비', TXT.hanja='懲毖', TXT.subtitle='일곱 해의 패'
-TXT.act[1..7] = { no:'一', era:'임진', name:'검은 돛', period, intro:['…'] }
-TXT.date(str) → '임진년 사월 열나흘'      // '1592.4.14' → 간지 연도 + 음력 월일 한글. 범위·월만도 처리
-TXT.dist = ['遠','近','接'], TXT.distName=['멀리','가까이','붙음'], TXT.tutorial = { far:[…], near:[…], close:[…], suspicion:[…] }
-TXT.type = { atk:'攻', def:'守', tac:'策', rep:'狀', edict:'御' }, TXT.pool = {…}, TXT.rarity = {…}
+TXT.act[1..7] = { no:'1', era:'임진', name:'검은 돛', period, intro:['…'] }   // 4막 이름은 ‘휴전’
+TXT.date(str) → '1592년 4월 14일'          // 범위 '1592.4.17~19' → '1592년 4월 17~19일', 월만 → '1592년 4월'. 간지는 TXT.ganji(이야기 글 맛내기용)
+TXT.dist = ['원거리','중거리','근접'], TXT.distName=['멀리','가까이','붙음'], TXT.tutorial = { far:[…], near:[…], close:[…], suspicion:[…] }
+TXT.type = TXT.typeName = { atk:'공격', def:'방어', tac:'계책', rep:'장계', edict:'어명' }, TXT.pool = {…}, TXT.rarity = {…}
 TXT.status[id] = { name, hanja, desc }, TXT.buff[id] = { name, desc }, TXT.tag = { shot:'사격', melee:'백병', charge:'돌격', fire:'화공', none:'' }
-TXT.intent = { atk:'{text} {n}', approach:'접근', load:'裝', … }
-TXT.opsText(ops, ctx?) → '의심 −1, 군량 +20'         // 33개 op 전부. cond는 「(遠이면) …, (아니면) …」
+TXT.intent = { atk:'{text} {n}', approach:'접근', load:'장전', fire:'조총 사격', pierce:'관통', stunned:'정지', … }
+TXT.fill(str, vars) → string                     // {n} {pct} {name} {text} {dist} 와 조사 꼴 {name:iga|eunun|eulrul|euro}. TXT.FILL_KEYS
+TXT.josa.iga(word) / eunun / eulrul / euro → word+조사   // '이(가)' 같은 꼴은 쓰지 않는다
+TXT.opsText(ops, ctx?) → '의심 −1, 군량 +20'         // 33개 op 전부. cond는 ‘(원거리면) …, (아니면) …’
 TXT.cardDesc(card, up, ctx?) → string               // desc + 거리 배율·지역 보정·군량·소모/보존 문구
 TXT.banner = { crane, kurushima, rescue, wave, arrows, tide_flow, edict, starve, leave, counterspy, … }
 TXT.scroll = { thresh4:{title,lines}, thresh7, thresh10, chilcheon, return_tongjesa, prison, bossIntro:{[encId]:{title,memo,lines}}, council1, council2, council3_keep, council3_dismiss, … }
@@ -642,12 +654,26 @@ TXT.rescue(name) → '황진이 창을 들고 앞으로 나섰다. 북소리가 
 TXT.defeat[1..7], TXT.ending = { silrok:{title, lines(G)}, jingbi:{…}, nanse:{…} }
 TXT.compare[bossEnc](stats) → string                // 역사 대조 한 줄 7개
 TXT.log = { play:(card)=>…, hit:(name,n)=>…, enemyAct:(name,intent)=>…, dead:(name)=>…, push:(from,to)=>…, turn:(n)=>…, starve:…, stunFail:… }
-TXT.ui = { endTurn:'턴을 마친다', skip:'거른다', confirm:'그리한다', cancel:'물린다', continue:'계속', newRun:'새 판', resume:'이어하기', settings:'설정', deck:'패 보기', buy:'산다', leave:'떠난다', remove:'환향', rest:'쉰다', train:'조련', farm:'둔전', report:'장계를 올린다', recruit:'천거', request:'청병', decline:'사양한다', … }
-TXT.merit = { head, slots:{leader:'주장',king:'성은',ming:'명군'}, effects:{…} }
+TXT.ui = { endTurn:'턴 종료', skip:'건너뛰기', confirm:'확인', cancel:'취소', close:'닫기', back:'뒤로', leave:'나가기', decline:'거절', continue:'계속', next:'다음', newRun:'새 게임', resume:'이어하기', settings:'설정', deck:'덱 보기', buy:'구매', remove:'카드 버리기', shopHead:'시장', rest:'휴식', train:'훈련', farm:'농사', report:'장계 올리기', recruit:'장수 영입', request:'명군 요청', … }
+TXT.merit = { head, slots:{leader:'주장',king:'전하',ming:'명군'}, effects:{…} }
 TXT.council = {…}, TXT.memo = { '1592.4.14':'부산진 함락', … }
-TXT.terrain[id] = { name, desc }, TXT.kindIcon = { fight:'⚔', naval:'⚓', elite:'★', event:'📜', camp:'⛺', shop:'🏮', court:'🏯', boss:'👹', council:'👑' }
+TXT.terrain[id] = { name, desc }, TXT.kindIcon = { fight:'swords', naval:'anchor', elite:'skull', event:'scroll', camp:'campfire', shop:'pouch', court:'palace', boss:'helm', council:'ikseon' }   // ART.icon 이름(이모지 아님)
 TXT.selfTest()
 ```
+
+### 7.7 `ART` (`10b_art.js`) — 순수 그리기
+```js
+ART.CHAR[id]   // yi gwon yi_eokgi kim_simin jeong_munbu jo_heon hwang_jin yi_jeongam soldier soldier2 militia king official official2 merchant
+ART.person(c, id, x, y, s, o)          // 발 아래 (x,y). o.pose: 'idle'|'attack'|'hurt'|'win'(무기 들고 웃으며 살짝 뜀)|'down'(쓰러짐: 고개 숙임, 감은 눈, X 눈 없음)
+ART.portrait(c, id, x, y, r, o)        // 얼굴이 원을 채운다(머리 중심 y+0.14r, 배율 r/46, 투구 꼭지가 잘리지 않음). 인물별 배경 sp.bg
+ART.enemy(c, en, cx, base, w, t, o)    // o.naval: 배가 아닌 적을 작은 거룻배에 태운다
+ART.throne(c, x, y, w, h, t)           // 일월오봉도 병풍. (x,y)=왼쪽 위. 달 왼쪽·해 오른쪽, 다섯 봉우리·폭포·소나무·물결. 빛줄기 없음
+ART.icon(c, name, x, y, size, col?)    // 'pouch'(엽전 꾸러미, 시장) · 'ikseon'(익선관, 임금·조정·어전회의). 옛 'crown'도 익선관을 그린다
+ART.foe / wship / panokseon / turtleShip / castle / cardArt / burst / slash / shade / rr   // 시그니처는 예전과 같다
+```
+- 이순신은 권율의 색만 바꾼 꼴이 아니다: 손에 든 붉은 장군기(글자 없음), 큰 붉은 상모, 두 손 장검, 가슴 호심경. 20px 초상에서도 알아본다. 임금은 붉은 곤룡포와 익선관(`helm:'ikseon'`), 관리는 사모(`helm:'samo'`), 상인은 패랭이와 등짐.
+- 모든 투구·모자의 챙은 눈썹 위에 둔다(눈썹·눈을 가리지 않는다).
+- **빛줄기 금지**: 붉은 바탕에 방사형 빛살은 욱일기로 읽힌다. 어디에도 바퀴살·빛살을 그리지 않는다. 은은한 원형 빛·반짝임·꽃종이를 쓴다.
 
 ---
 
@@ -668,8 +694,11 @@ Run 발화: `onActStart`(기물 `runMods.actStartOps`) · `onAcquire`(기물 `on
 ---
 
 ## 10. 문체·표기 규칙 (모든 파일)
-- 로그·배너·두루마리: 사극 톤, 「」 인용, 음력 날짜 한글(`TXT.date`). 숫자는 아라비아 숫자.
-- 카드 `desc`는 규칙 문구(「6 피해. 遠이면 +8」). 거리 배율·지역 보정 문구는 `TXT.cardDesc`가 덧붙인다.
+- 로그·배너·두루마리: 사극 톤. 대사는 “ ”, 카드·기물·제목·용어는 ‘ ’. 「」『』〔〕는 쓰지 않는다. 날짜는 `TXT.date`(‘1592년 4월 15일’). 숫자는 아라비아 숫자.
+- 화면에 나오는 글에 한자·영어를 쓰지 않는다(데이터의 `hanja` 칸만 예외, 그리지 않는다). 한자가 뜻을 지는 일도 없다(‘攻 카드’가 아니라 ‘공격 카드’). 영어 꼬리표 ‘(shot)’ 따위도 없다.
+- 규칙·UI 글에서는 ‘카드’(‘패’는 부제 ‘일곱 해의 패’와 이야기 글에서만), ‘턴’(‘합’ 금지). 시장(장시 아님)·카드 버리기(환향 아님)·휴식/훈련/농사·장계 올리기/장수 영입/명군 요청. 군령·진형·군량·의심·장계·어명·부장·주장·결전·정예는 그대로.
+- 조사는 `TXT.josa`·`TXT.fill`로 붙인다. `check.js`의 ‘글자 위생’이 데이터와 생성 문구 전부를 검사한다.
+- 카드 `desc`는 규칙 문구(‘6 피해. 원거리면 +8’). 거리 배율·지역 보정 문구는 `TXT.cardDesc`가 덧붙인다.
 - 「전승」 표기 대상: 세마대·명량 쇠사슬. 삼단 사격·논개 금지.
 
 ---
@@ -719,5 +748,10 @@ Run 발화: `onActStart`(기물 `runMods.actStartOps`) · `onAcquire`(기물 `on
 | 막 배율 | 체력 +12%/막 | +8%/막 | 시뮬 밸런스(덱 성장 속도에 맞춤) |
 | 결전 수치 | DESIGN §5.8 | 와키자카 90·등선 14·세키부네 2척 / 행주 30·34·40, 호위 가볍게, 공격 13·18~22 / 구로다 100·돌격 14 / 도도 130(칠천량 없으면 140, 증원 3턴) · 구루시마 40 / 노량 100·120, 자폭 20 / 안택선 40·등선 12 / 기마 무사 돌격 10 | 시뮬 300판 기준 완주 20~25%, 1막 사망 ≤5% |
 | 지도 좌표 | 1280×720 고정 | 화면이 열들을 가로 가운데로 옮겨 그린다 | 7열 막의 오른쪽이 비어 보였다 |
-| 화면 문자·화풍 | 한자 인장·먹 두루마리·「遠/近/接」·「發」「裝」 | 화면에는 한자를 쓰지 않는다. 거리는 원거리·중거리·근접, 의도·종류·기물은 `ART.icon` 그림, 장수는 `ART.person`/`ART.portrait` 캐릭터. `UIBattle.gfx.txt/para`가 모든 글에서 괄호 속 한자와 홀로 쓴 한자를 걷어 낸다(`gfx.clean`). 데이터의 `hanja` 칸은 남겨 두되 그리지 않는다 | 사용자 피드백: 「이순신 캐릭터가 없고 한자가 많아 중국 게임 같다, 게임스럽지 않다」 |
+| 화면 문자·화풍 | 한자 인장·먹 두루마리·「遠/近/接」·「發」「裝」 | 화면에는 한자를 쓰지 않는다. 거리는 원거리·중거리·근접, 의도·종류·기물은 `ART.icon` 그림, 장수는 `ART.person`/`ART.portrait` 캐릭터. `UIBattle.gfx.txt/para`가 모든 글에서 괄호 속 한자와 홀로 쓴 한자를 걷어 낸다(`gfx.clean`). 데이터의 `hanja` 칸은 남겨 두되 그리지 않는다 | 사용자 피드백: “이순신 캐릭터가 없고 한자가 많아 중국 게임 같다, 게임스럽지 않다” |
+| 날짜 표기 | 음력 한글(‘임진년 사월 열나흘’) | `TXT.date` → ‘1592년 4월 14일’(숫자는 그대로 음력). 간지는 이야기 글에서만 | 읽기 쉽게. 같은 날짜를 머리글과 본문 첫머리에 두 번 쓰지 않는다 |
+| 용어 | 패·합·장시·환향·조련·둔전·천거·청병·지구·강화(4막)·사신은 말한다 | 카드·턴·시장·카드 버리기·훈련·농사·장수 영입·명군 요청·버티기(권율 패시브)·휴전(4막)·사관은 이렇게 적었다. 낯선 카드·적·기물 이름도 쉬운 말로(ID는 그대로) | ‘강화’는 카드 강화와 겹친다. 처음 하는 사람이 읽을 수 있게 |
+| 의도 표시 | 「裝」「發」「貫」 | `markOf` → `'load'|'fire'|'pierce'`, 글은 ‘장전’·‘조총 사격’·‘관통’·‘정지’ | 한자 없이 그림 키로 |
+| 결전 보상 군량 | 보상을 고른 뒤 분기 op 적용 | 보상을 만들 때 적용하고 `bonusRation`·`bonusText`로 보여 준다 | 화면에 보이는 군량 = 실제로 얻는 군량 |
+| 화면 구성 | 두루마리·먹 | 단청 판·캐릭터 중심(제목·지도·사건·시장·군영·조정·어전회의·보상·결말에 주장이 서 있다. 시장 상인, 조정·어전회의 임금과 일월오봉도) | 게임처럼 보이게 |
 

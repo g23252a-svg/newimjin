@@ -198,7 +198,7 @@ if (CARDS && ENEMIES && GENERALS && EVENTS && MAPDATA) {
 }
 
 /* ---------------------------------------------------------------- 6. selfTest */
-for (const name of ['Core', 'TXT', 'CARDS', 'ENEMIES', 'GENERALS', 'EVENTS', 'MAPDATA', 'Input', 'Combat', 'Run']) {
+for (const name of ['Core', 'TXT', 'CARDS', 'ENEMIES', 'GENERALS', 'EVENTS', 'MAPDATA', 'Input', 'Audio_', 'Combat', 'Run', 'UIBattle']) {
   const g = G(name);
   if (!g || typeof g.selfTest !== 'function') { rec('selfTest ' + name, !strict, '없음'); continue; }
   let r; try { r = g.selfTest(); } catch (e) { r = { ok: false, errors: [String(e)] }; }

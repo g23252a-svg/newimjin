@@ -15,6 +15,8 @@ var ART = (function () { 'use strict';
   function ol(c, w) { c.lineWidth = w || 2.6; c.strokeStyle = OUT; c.lineJoin = 'round'; c.lineCap = 'round'; }
   function fs(c, fill, w) { c.fillStyle = fill; c.fill(); ol(c, w); c.stroke(); }
   function ell(c, x, y, rx, ry, rot) { c.beginPath(); c.ellipse(x, y, Math.max(0.1, rx), Math.max(0.1, ry), rot || 0, 0, PI * 2); }
+  // 왜군 깃발·돛의 검은 가문 문양(고리 + 세 점). 흰 바탕에 빨간 원 하나는 일장기로 읽히므로 쓰지 않는다
+  function mon(c, x, y, r) { ell(c, x, y, r, r); ol(c, Math.max(1.6, r * 0.28)); c.stroke(); c.fillStyle = '#1d1d24'; for (var k = 0; k < 3; k++) { ell(c, x + Math.cos(k * 2.094 - 1.571) * r * 0.42, y + Math.sin(k * 2.094 - 1.571) * r * 0.42, r * 0.28, r * 0.28); c.fill(); } }
   function rr(c, x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
   function limb(c, x1, y1, x2, y2, w, col) {
     c.lineCap = 'round';
@@ -201,7 +203,7 @@ var ART = (function () { 'use strict';
     return [28, -70 + bob];
   }
   function heldWeapon(c, sp, pose, hx, hy, t) {
-    var w = sp.weapon, A = WANG[w]; if (!A) return;
+    var w = sp.weapon, A = WANG[w]; if (!A || (inPortrait && w === 'bow')) return;   // 초상에서는 활이 턱 앞을 가로지르므로 그리지 않는다
     var att = pose === 'attack';
     c.save(); c.translate(hx, hy); c.rotate(A[pose] != null ? A[pose] : A.idle);
     if (w === 'sword') {
@@ -442,7 +444,7 @@ var ART = (function () { 'use strict';
       c.strokeStyle = OUT; c.lineWidth = 4; c.beginPath(); c.moveTo(-14, -60 + bob); c.lineTo(-14, -190 + bob); c.stroke();
       var w2 = Math.sin(t / 240) * 3;
       poly(c, [-14, -188 + bob, 14 + w2, -186 + bob, 14 + w2, -136 + bob, -14, -138 + bob]); fs(c, sp.boss ? '#f4efe2' : '#f0eadc', 2);
-      ell(c, 0 + w2 / 2, -162 + bob, 8, 8); c.fillStyle = sp.boss ? '#1d1d24' : '#b8352a'; c.fill();
+      if (sp.boss) { ell(c, 0 + w2 / 2, -162 + bob, 8, 8); c.fillStyle = '#1d1d24'; c.fill(); } else mon(c, w2 / 2, -162 + bob, 8);
     }
     if (sp.cape) { poly(c, [-20, -100 + bob, -36, -46, -28, -12, 12, -14, 16, -100 + bob]); fs(c, sp.cape); }
     if (!sp.horse) { rr(c, -15, -30, 12, 30, 4); fs(c, '#231a14'); rr(c, 3, -30, 12, 30, 4); fs(c, '#231a14'); }
@@ -510,7 +512,8 @@ var ART = (function () { 'use strict';
       c.strokeStyle = 'rgba(40,30,20,.55)'; c.lineWidth = 1.5; for (var k = 1; k < 5; k++) { c.beginPath(); c.moveTo(-sx, sy0 + k * sh / 5); c.lineTo(sx, sy0 + k * sh / 5); c.stroke(); }
       // 가문 문양
       if (id === 'shimazu_p1' || id === 'shimazu_p2') { ell(c, 0, sy0 + sh / 2, 14, 14); ol(c, 3); c.stroke(); c.beginPath(); c.moveTo(-14, sy0 + sh / 2); c.lineTo(14, sy0 + sh / 2); c.moveTo(0, sy0 + sh / 2 - 14); c.lineTo(0, sy0 + sh / 2 + 14); c.stroke(); }
-      else { ell(c, 0, sy0 + sh / 2, big ? 13 : 10, big ? 13 : 10); c.fillStyle = en.boss ? '#1d1d24' : '#b8352a'; c.fill(); }
+      else if (en.boss) { ell(c, 0, sy0 + sh / 2, 13, 13); c.fillStyle = '#1d1d24'; c.fill(); }
+      else mon(c, 0, sy0 + sh / 2, big ? 12 : 10);
     }
     // 깃발들
     var fw = Math.sin(t / 220) * 3;

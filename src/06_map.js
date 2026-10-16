@@ -68,7 +68,7 @@ var MAPDATA = (function(){ 'use strict';
     { act:2, col:3, id:'a2s_dangpo',       lane:'sea', kind:'fight', type:'naval', enc:'dangpo',           terrain:'port',   name:'당포',       do:'남해', date:'1592.6.2', blurb:'포구에 정박한 왜선을 친다.' },
     { act:2, col:3, id:'a2s_danghangpo',   lane:'sea', kind:'elite', type:'naval', enc:'danghangpo_elite', elite:true, terrain:'port', name:'당항포', do:'남해', date:'1592.6.5', blurb:'큰 배가 보인다. 대장선을 유인해 끌어낸다.' },
     { act:2, col:4, id:'a2s_yeosu_camp',   lane:'sea', kind:'camp',                                        terrain:'none',   name:'여수 좌수영(군영)', do:'전라', date:'1592.6', blurb:'좌수영에서 노꾼들을 쉬게 한다.' },
-    { act:2, col:4, id:'a2s_yeosu_shop',   lane:'sea', kind:'shop',                                        terrain:'none',   name:'여수 좌수영(시장)', do:'전라', date:'1592.6', blurb:'좌수영 시장. 총통과 화약을 갖춘다.' },
+    { act:2, col:4, id:'a2s_yeosu_shop',   lane:'sea', kind:'shop',                                        terrain:'none',   name:'여수 시장', do:'전라', date:'1592.6', blurb:'좌수영 시장. 총통과 화약을 갖춘다.' },
     { act:2, col:5, id:'a2s_yulpo',        lane:'sea', kind:'fight', type:'naval', enc:'yulpo',            terrain:'port',   name:'율포',       do:'남해', date:'1592.6.7', blurb:'달아나는 왜선을 쫓아 포구 앞에서 친다.' },
     { act:2, col:5, id:'a2s_jeokjinpo',    lane:'sea', kind:'camp',                                        terrain:'none',   name:'적진포',     do:'남해', date:'1592.6.7', blurb:'포구에 닻을 내리고 배를 손본다.' },
     { act:2, col:6, id:'a2s_gyeonnaeryang', lane:'sea', kind:'fight', type:'naval', enc:'gyeonnaeryang',   terrain:'strait', name:'견내량',     do:'남해', date:'1592.7.7', blurb:'좁은 물길. 척후선이 먼저 눈에 띈다.' },

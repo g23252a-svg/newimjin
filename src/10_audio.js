@@ -144,7 +144,7 @@ var Audio_ = (function () { 'use strict';
     battle: { stepSec: 0.135, drum: [2, 0, 0, 2, 0, 0, 3, 1, 0, 3, 1, 0], drumAlt: [2, 0, 3, 1, 0, 3, 1, 3, 0, 2, 0, 0], drumVol: 0.34, bass: 77.8, gong: 0, phrases: 6,   // 자진모리, 북 강조
       lead: { type: 'sawtooth', vol: 0.085, atk: 0.012, vib: 0, lp: 1500, oct: 0 }, density: [0.8, 0.42], lens: [[1, 2, 3], [1, 1, 2]], range: [5, 14], start: 8, bendP: 0.12 },
     ending: { stepSec: 0.5, drum: [2, 0, 0, 0, 0, 0, 1, 0, 0, 3, 0, 0], drumAlt: null, drumVol: 0.13, bass: null, gong: 2, phrases: 8,          // 느린 굿거리, 두 바퀴마다 징
-      lead: { type: 'sine', vol: 0.14, atk: 0.12, vib: 4.5, lp: 3000, oct: 0.3 }, density: [0.45, 0.08], lens: [[3, 6, 6, 9], [2]], range: [0, 9], start: 3, bendP: 0.4 }
+      lead: { type: 'sine', vol: 0.14, atk: 0.12, vib: 4.5, lp: 3000, oct: 0.3 }, density: [0.8, 0.1], lens: [[3, 3, 6, 6], [2]], range: [0, 9], start: 3, bendP: 0.4 }
   };
   Object.keys(SONGS).forEach(function (k) { SONGS[k].name = k; });
 

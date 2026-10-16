@@ -269,21 +269,16 @@ var Run = (function () { 'use strict';
     }
     G.ration += ration;
     if (relic) gainRelic(relic, false);
-    // 결전 갈래 보상의 군량 op(탄금대 +20, 충주성 −20 등)는 보상을 만들 때 바로 적용한다 — 화면에 보이는 값 = 실제로 받는 값.
-    // afterBattle 은 이 군량 op 를 뒤 작업에서 뺀다. 군량 op 는 난수를 쓰지 않으므로 순서가 바뀌어도 결과는 같다.
-    var bonus = 0;
-    if (info.boss && info.reward && info.reward.ops) info.reward.ops.forEach(function (o) { if (o && o.op === 'ration') bonus += o.n || 0; });
+    var bonus = 0;   // 결전 갈래 보상의 군량 op(탄금대 +20 등)는 지금 적용한다 — 화면 값 = 받는 값. 난수를 쓰지 않아 순서는 무관
+    (info.boss && info.reward && info.reward.ops || []).forEach(function (o) { if (o && o.op === 'ration') bonus += o.n || 0; });
     if (bonus) G.ration = Math.max(0, G.ration + bonus);
     var ids = rewardCards(B.REWARD.cards, !!info.boss, info.type);
     return { kind: 'reward', cards: ids.map(card), cardIds: ids, relic: relic ? GENERALS.relics.get(relic) : null, ration: ration,
       bonusRation: bonus, bonusText: bonus ? bonusWhy(info, bonus) : '',
       skipBonus: B.RATION_SKIP, elite: !!info.elite, boss: !!info.boss };
   }
-  function bonusWhy(info, n) {
-    var X = T(), R = (X && X.rewardBonus) || {};
-    if (info.encId === 'boss_konishi' && R[G.flags.b1 || 'river']) return R[G.flags.b1 || 'river'];
-    return n > 0 ? (R.plus || '결전의 전리품') : (R.minus || '결전에 쓴 군량');
-  }
+  function bonusWhy(info, n) { var X = T(), R = (X && X.rewardBonus) || {}, b1 = G.flags.b1 || 'river';
+    return (info.encId === 'boss_konishi' && R[b1]) || (n > 0 ? (R.plus || '결전의 전리품') : (R.minus || '결전에 쓴 군량')); }
   function pickCardItem(reason, n, cands, canSkip) {
     return { kind: 'pickCard', reason: reason, n: n, canSkip: !!canSkip,
       candidates: cands.map(function (d) { return { uid: d.uid, id: d.id, up: !!d.up, card: card(d.id) }; }) };
@@ -407,11 +402,8 @@ var Run = (function () { 'use strict';
     try {
       if (spec.fromNode) { var nd = MAPDATA.nodes.byId[info.nodeId]; if (nd && nd.onWin && nd.onWin.length) applyOps(nd.onWin, {}); }
     } finally { items = items.concat(pend); pend = null; }
-    var rOps = (info.boss && info.reward && info.reward.ops) || [];
-    if (spec.reward !== false) {
-      items.push(makeReward({ boss: info.boss, elite: info.elite, reward: info.reward, type: info.type, encId: info.encId }));
-      rOps = rOps.filter(function (o) { return !o || o.op !== 'ration'; });   // 군량은 makeReward 가 이미 적용했다
-    }
+    var rOps = (info.boss && info.reward && info.reward.ops) || [];   // 보상이 있으면 군량 op 는 makeReward 가 이미 적용했다
+    if (spec.reward !== false) { items.push(makeReward({ boss: info.boss, elite: info.elite, reward: info.reward, type: info.type, encId: info.encId })); rOps = rOps.filter(function (o) { return !o || o.op !== 'ration'; }); }
     if (rOps.length) items.push(task('ops', { ops: rOps }));
     if (spec.onWin && spec.onWin.length) items.push(task('ops', { ops: spec.onWin }));
     if (info.boss) items.push(meritItem());
@@ -448,10 +440,8 @@ var Run = (function () { 'use strict';
     var o = { kind: 'scroll', key: key, title: (s && s.title) || '', lines: (s && s.lines) ? s.lines.slice() : [], memo: (s && s.memo) || null, date: null, encId: null };
     if (extra) {
       for (var k in extra) if (k !== 'name') o[k] = extra[k];
-      if (extra.name) {                                            // '{name:iga}' 같은 조사 자리표까지 TXT.fill 로 채운다
-        var fillName = function (l) { return X && X.fill ? X.fill(l, { name: extra.name }) : String(l).replace(/\{name(:\w+)?\}/g, extra.name); };
-        o.title = fillName(o.title); o.lines = o.lines.map(fillName);
-      }
+      var fillName = function (l) { return X && X.fill ? X.fill(l, { name: extra.name }) : String(l).replace(/\{name(:\w+)?\}/g, extra.name); };   // '{name:iga}' 조사까지
+      if (extra.name) { o.title = fillName(o.title); o.lines = o.lines.map(fillName); }
     }
     return o;
   }

@@ -1,5 +1,5 @@
 /* ===== 11_ui_battle.js — 전투 화면·손패·거리 눈금·의도·연출 큐 + 공용 그리기 도구(gfx) (전역 UIBattle) ===== */
-// 계약서 §7.3. 상태 전이는 Combat 이 즉시 하고, 화면은 Core.bus 'fx' 이벤트를 큐로 받아 「이후 값」으로 따라간다.
+// 계약서 §7.3. 상태 전이는 Combat 이 즉시 하고, 화면은 Core.bus 'fx' 이벤트를 큐로 받아 '이후 값'으로 따라간다.
 // 큐가 비면 화면 값(V)을 실제 상태(st)와 맞춘다. 카드 조작은 큐가 비고 phase 가 'player' 일 때만 받는다.
 // 그림은 ART(10b_art)가 그린다: 장수·왜군 캐릭터, 배, 아이콘, 카드 그림. 화면에는 한자를 쓰지 않는다(clean 이 괄호 속 한자를 걷어 낸다).
 // 공용 그리기 도구 UIBattle.gfx 는 12_ui_screens 가 함께 쓴다.
@@ -22,16 +22,16 @@ var UIBattle = (function () { 'use strict';
   /* ================================================================ 공용 그리기 도구 */
   function X() { return (typeof TXT !== 'undefined') ? TXT : {}; }
   function ui(k, d) { var u = X().ui; return (u && u[k]) || d; }
-  // 화면에 그리는 글의 마지막 안전망: 한자(호환·확장 B·가나 포함)를 걷어 내고, 「」『』는 ‘’로, 〔〕는 지우고,
+  // 화면에 그리는 글의 마지막 안전망: 한자(호환·확장 B·가나 포함)를 걷어 내고, 옛 낫표·겹낫표는 작은따옴표로 바꾸고, 육각괄호는 지우고,
   // 영어 꼬리표 괄호 '(shot)' '(gun·bow)'를 지운 뒤 남은 빈 괄호·떠도는 문장부호를 정리한다
-  var CJK = '⺀-⿟々-〇〡-〩぀-ヿ㐀-䶿一-鿿豈-﫿', SUR = '[\uD840-\uD87F][\uDC00-\uDFFF]';
+  var CJK = '\u2E80-\u2FDF\u3005-\u3007\u3021-\u3029\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF', SUR = '[\uD840-\uD87F][\uDC00-\uDFFF]';
   var RE_CJK = new RegExp('[' + CJK + ']|' + SUR), RE_CJK_RUN = new RegExp('(?:[' + CJK + ']|' + SUR + ')+', 'g');
   var RE_CJK_PAREN = new RegExp('\\s*[(（][^()（）]*(?:[' + CJK + ']|' + SUR + ')[^()（）]*[)）]', 'g');
-  var RE_CJK_QUOTE = new RegExp('[「『]\\s*(?:[' + CJK + '\\s·]|' + SUR + ')+\\s*[」』]', 'g');
-  var RE_EN_PAREN = /\s*[(（]\s*[A-Za-z][A-Za-z_\s·,\/&\-]*[)）]/g, RE_FAST = new RegExp('[(（「」『』〔〕' + CJK + '\uD840-\uD87F]');
+  var RE_CJK_QUOTE = new RegExp('[\u300C\u300E]\\s*(?:[' + CJK + '\\s·]|' + SUR + ')+\\s*[\u300D\u300F]', 'g');
+  var RE_EN_PAREN = /\s*[(\uFF08]\s*[A-Za-z][A-Za-z_\s·,\/&\-]*[)\uFF09]/g, RE_FAST = new RegExp('[(\uFF08\u300C\u300D\u300E\u300F\u3014\u3015' + CJK + '\uD840-\uD87F]');
   var cleanCache = Object.create(null), cleanN = 0;
   function tidy(s) {
-    return s.replace(/‘\s*’|“\s*”|\(\s*\)|（\s*）|「\s*」/g, '').replace(/^[ \t]*[—\-·,.:;][ \t]*/, '').replace(/[ \t]*[—·,:;][ \t]*$/, '')
+    return s.replace(/‘\s*’|“\s*”|\(\s*\)|\uFF08\s*\uFF09|\u300C\s*\u300D/g, '').replace(/^[ \t]*[—\-·,.:;][ \t]*/, '').replace(/[ \t]*[—·,:;][ \t]*$/, '')
       .replace(/[ \t]{2,}/g, ' ').replace(/[ \t]+([.,!?)’”])/g, '$1').replace(/([(‘“])[ \t]+/g, '$1').replace(/([.,])[ \t]*\1+/g, '$1').replace(/^[ \t]+|[ \t]+$/g, '');
   }
   function clean(s) {
@@ -41,8 +41,8 @@ var UIBattle = (function () { 'use strict';
     var o = s, cut = false;
     if (RE_CJK.test(o)) { o = o.replace(RE_CJK_PAREN, '').replace(RE_CJK_QUOTE, '').replace(RE_CJK_RUN, ''); cut = true; }
     var o2 = o.replace(RE_EN_PAREN, ''); if (o2 !== o) { o = o2; cut = true; }
-    if (/[〔〕]/.test(o)) { o = o.replace(/[〔〕]/g, ''); cut = true; }
-    o = o.replace(/[「『]/g, '‘').replace(/[」』]/g, '’');
+    if (/[\u3014\u3015]/.test(o)) { o = o.replace(/[\u3014\u3015]/g, ''); cut = true; }
+    o = o.replace(/[\u300C\u300E]/g, '‘').replace(/[\u300D\u300F]/g, '’');
     if (cut) o = tidy(o);
     if (++cleanN > 4000) { cleanCache = Object.create(null); cleanN = 0; }
     cleanCache[s] = o;
@@ -200,7 +200,11 @@ var UIBattle = (function () { 'use strict';
     ART.cardArt(c, card, x + 6 * s, y + 27 * s, w - 12 * s, 56 * s, Main.time);
     rr(c, x + 6 * s, y + 27 * s, w - 12 * s, 56 * s, 5 * s); c.lineWidth = 1.6 * s; c.strokeStyle = '#1d140d'; c.stroke();
     // 이름 띠
-    txt(c, card.name + (up ? '+' : ''), x + w / 2 + 8 * s, y + 18 * s, { size: 12.5 * s, weight: 'bold', align: 'center', color: up ? C.goldL : '#fff', maxW: w - 36 * s, stroke: 3 * s, strokeColor: 'rgba(20,10,5,.75)' });
+    // 비용 보석(왼쪽)과 희귀 마름모(오른쪽) 사이에 맞춘다. 길면 글자를 눌러 찌그러뜨리지 않고 크기를 줄인다
+    var nm = clean(card.name + (up ? '+' : '')), nx0 = x + 26 * s, nx1 = x + w - ((card.rarity === 'rare' || card.rarity === 'special') ? 21 : 6) * s, nmax = nx1 - nx0, nsz = 12.5 * s;
+    c.font = F(nsz, 'bold'); var nw = c.measureText(nm).width;
+    if (nw > nmax) nsz = Math.max(9 * s, nsz * nmax / nw);
+    txt(c, nm, (nx0 + nx1) / 2, y + 18 * s, { size: nsz, weight: 'bold', align: 'center', color: up ? C.goldL : '#fff', maxW: nmax, stroke: 3 * s, strokeColor: 'rgba(20,10,5,.75)' });
     // 비용 보석
     var cost = o.cost != null ? o.cost : cardCost(card, up), base = cardCost(card, up);
     c.beginPath(); c.arc(x + 13 * s, y + 13 * s, 12 * s, 0, Math.PI * 2);
@@ -342,7 +346,7 @@ var UIBattle = (function () { 'use strict';
 
   /* ================================================================ 배치 */
   var L = {
-    lead: { x: 206, y: 404, s: 1.1 }, deps: [{ x: 84, y: 396, s: 0.74 }, { x: 322, y: 396, s: 0.74 }, { x: 34, y: 392, s: 0.68 }],
+    lead: { x: 206, y: 404, s: 1.1 }, deps: [{ x: 84, y: 396, s: 0.74 }, { x: 322, y: 396, s: 0.74 }, { x: 48, y: 392, s: 0.66 }],
     frame: { x: 54, y: 412, w: 290, h: 48 },          // 주장 이름표: 초상 + 이름 + 병력 막대 (그 아래 줄에 진형·성벽·상태)
     gauge: { x: 392, y: 300, cw: 98, ch: 62 },
     enemy: { x0: 700, x1: 1262, base: 404 }, log: { y: 470 },
@@ -652,7 +656,7 @@ var UIBattle = (function () { 'use strict';
       for (var wv = 0; wv < 8; wv++) { var yy = 330 + wv * 28, ph = S.t / 700 + wv; c.beginPath(); for (var xx = 0; xx <= W; xx += 24) c.lineTo(xx, yy + Math.sin(xx / 60 + ph) * 3); c.stroke(); }
     }
     drawPlayer(c, showResult);
-    drawGauge(c);
+    if (!showResult) drawGauge(c);                       // 승패 글자 뒤에 거리 판이 비치지 않게
     drawEnemies(c);
     drawEffects(c);
     c.restore();
@@ -665,7 +669,7 @@ var UIBattle = (function () { 'use strict';
     drawHand(c);
     drawPilesAndButtons(c);
     drawFlyersFloats(c);
-    drawTutorial(c);
+    if (!showResult) drawTutorial(c);
     drawBanners(c);
     if (S.detailIdx >= 0 && !S.drag) drawDetail(c, S.detailIdx);
     else S.tips.forEach(function (t) { tooltip(c, t[0], t[1], t[2], t[3], t[4]); });
@@ -744,18 +748,18 @@ var UIBattle = (function () { 'use strict';
     if (Input.hover('leader') || Input.hover('leadFrame')) leaderTip();
   }
   // 주장: 발밑의 금빛 기운 + 몸 (+ 성 위라면 앞 여장)
-  function drawHero(c, pose) {
+  function drawHero(c, pose, noParapet) {
     var lp = leadPos(), lead = S.st.player.leader || 'yi';
     c.save(); c.translate(lp.x, lp.y + 2); c.scale(1, 0.26);
     var gg = c.createRadialGradient(0, 0, 6, 0, 0, 84); gg.addColorStop(0, 'rgba(255,224,138,.55)'); gg.addColorStop(1, 'rgba(255,224,138,0)');
     c.fillStyle = gg; c.beginPath(); c.arc(0, 0, 84, 0, 7); c.fill(); c.restore();
     ART.person(c, lead, lp.x, lp.y, lp.s, { t: S.t, pose: pose || 'idle' });
-    if (onWall()) parapet(c);
+    if (onWall() && !noParapet) parapet(c);
   }
   function parapet(c) {          // 성 위 앞 여장(성가퀴): 사람의 다리를 가린다
     var y = WALL.top;
     c.fillStyle = '#a89c86'; c.fillRect(0, y - 4, WALL.w, 10);
-    for (var x = 2; x < WALL.w - 10; x += 40) {
+    for (var x = WALL.w - 28; x > -28; x -= 40) {          // 성벽 오른쪽 끝에 맞춰 놓는다
       c.fillStyle = '#b8ad98'; c.fillRect(x, y - 30, 28, 34);
       c.fillStyle = 'rgba(255,255,255,.18)'; c.fillRect(x, y - 30, 28, 4);
       c.strokeStyle = 'rgba(70,52,36,.55)'; c.lineWidth = 2; c.strokeRect(x, y - 30, 28, 34);
@@ -786,7 +790,7 @@ var UIBattle = (function () { 'use strict';
     txt(c, name, tx, Fm.y + 19, { size: 16, weight: 'bold', color: C.goldL, stroke: 3 });
     c.font = F(16, 'bold'); var nw = c.measureText(clean(name)).width;
     txt(c, '주장', tx + nw + 6, Fm.y + 18, { size: 11, weight: 'bold', color: C.dim });
-    if (inc > 0 || incAfter !== null) {
+    if (inc > 0 || (incAfter !== null && incAfter !== inc)) {
       var better = incAfter !== null && incAfter < inc;
       txt(c, '받을 피해 ' + inc + (incAfter !== null && incAfter !== inc ? ' → ' + incAfter : ''), Fm.x + Fm.w - 14, Fm.y + 19, { size: 13.5, align: 'right', color: better ? C.green : '#ff9a82', weight: 'bold', stroke: 3 });
     }
@@ -857,7 +861,9 @@ var UIBattle = (function () { 'use strict';
       { icon: 'gun', v: M.e_gun[d], good: M.e_gun[d] < 1, bad: M.e_gun[d] > 1 },
       { icon: 'sword', v: M.e_melee[d], good: M.e_melee[d] < 1, bad: M.e_melee[d] > 1 }
     ];
-    var cw = 92, gap = 5, x0 = G2.x + (G2.cw * 3 - (cw * 3 + gap * 2)) / 2;
+    // 칩이 위 세 칸과 줄이 맞으면 '그 칸의 배율'로 읽히므로, 왼쪽에 '배율' 글을 두고 칩을 칸과 어긋나게 놓는다
+    txt(c, '배율', G2.x + 2, cy + 1, { size: 12.5, base: 'middle', color: C.goldL, weight: 'bold' });
+    var gap = 4, x0 = G2.x + 38, cw = (G2.cw * 3 - 40 - gap * 2) / 3;
     chipsL.forEach(function (ch, k) {
       var x = x0 + k * (cw + gap);
       rr(c, x, cy - 11, cw, 22, 11); c.fillStyle = 'rgba(8,16,20,.7)'; c.fill();
@@ -1051,8 +1057,8 @@ var UIBattle = (function () { 'use strict';
     if (!inf.playable) extra.push({ text: inf.reason, color: '#ff8d76', bold: true });
     // 상자는 고른 카드 옆, 손패 띠 안에 바닥을 맞춰 둔다: 적 병력 막대의 예상 피해와 주장 이름표를 가리지 않는다
     var px = S.pos[inst.uid] ? S.pos[inst.uid].x : 500, bx = px + L.hand.w + 14;
-    if (bx > W - 356) bx = px - 364;
-    cardInfoBox(c, cd, inst.up, Math.max(6, Math.min(W - 356, bx)), 712, 350, extra, true);
+    if (bx + 350 > L.end.x - 8) bx = px - 364;                 // 턴 종료 단추를 덮지 않게: 넘치면 카드 왼쪽으로
+    cardInfoBox(c, cd, inst.up, Math.max(6, Math.min(L.end.x - 358, bx)), 712, 350, extra, true);
   }
   function drawPilesAndButtons(c) {
     var st = S.st, V = S.V, E = L.energy;
@@ -1183,11 +1189,15 @@ var UIBattle = (function () { 'use strict';
     var won = S.st.won, k = Math.min(1, S.doneT / 400), lp = leadPos(), req = S.req || {};
     c.save(); c.globalAlpha = k;
     c.fillStyle = 'rgba(4,8,12,.55)'; c.fillRect(0, 0, W, H);
+    var vg = c.createRadialGradient(W / 2 + 70, 330, 40, W / 2 + 70, 330, 420);   // 제목 뒤를 한 번 더 어둡게: 거리 판·자막이 글자와 겹쳐 읽히지 않게
+    vg.addColorStop(0, 'rgba(4,8,12,.6)'); vg.addColorStop(0.6, 'rgba(4,8,12,.4)'); vg.addColorStop(1, 'rgba(4,8,12,0)');
+    c.fillStyle = vg; c.fillRect(W / 2 + 70 - 420, 0, 840, H);
     var gl = c.createRadialGradient(lp.x, lp.y - 90, 10, lp.x, lp.y - 90, 210);
     gl.addColorStop(0, won ? 'rgba(255,224,138,.42)' : 'rgba(120,140,170,.25)'); gl.addColorStop(1, 'rgba(255,224,138,0)');
     c.fillStyle = gl; c.fillRect(lp.x - 220, lp.y - 310, 440, 440);
     c.restore();
-    drawHero(c, S.pose.kind === 'win' || S.pose.kind === 'down' ? S.pose.kind : (won ? 'win' : 'down'));
+    drawHero(c, S.pose.kind === 'win' || S.pose.kind === 'down' ? S.pose.kind : (won ? 'win' : 'down'), true);
+    if (onWall()) { parapet(c); c.fillStyle = 'rgba(4,8,12,' + (0.55 * k) + ')'; c.fillRect(0, WALL.top - 32, WALL.w, 40); }   // 앞 여장은 어두운 채로 다리를 가린다
     if (won) {
       c.save();
       (S.confetti || []).forEach(function (p) {
@@ -1223,9 +1233,9 @@ var UIBattle = (function () { 'use strict';
   // clean() 단위 시험 + 데이터 문자열을 clean 에 통과시켰을 때 빈 글이 되는 것이 없는지 본다
   function selfTest() {
     var errors = [], eq = function (a, b) { var r = clean(a); if (r !== b) errors.push('clean(' + a + ') = ' + r + ' ≠ ' + b); };
-    eq('「편전(片箭)」을 냈다.', '‘편전’을 냈다.'); eq('권율 — 權慄', '권율'); eq('해전에서 사격(shot) 카드 피해 +2.', '해전에서 사격 카드 피해 +2.');
-    eq('받는 사격(gun·bow) 피해 −70%', '받는 사격 피해 −70%'); eq('〔기물〕 통아', '기물 통아'); eq('「必死則生」', ''); eq('옥사(獄死)', '옥사');
-    eq('토산을 쌓는다. (2/3)', '토산을 쌓는다. (2/3)'); eq('쇼군 豐臣秀吉', '쇼군'); eq('「신은 바다를 압니다.」', '‘신은 바다를 압니다.’'); eq('이억기 (강화)', '이억기 (강화)');
+    eq('\u300C편전(\u7247\u7BAD)\u300D을 냈다.', '‘편전’을 냈다.'); eq('권율 — \u6B0A\u6144', '권율'); eq('해전에서 사격(shot) 카드 피해 +2.', '해전에서 사격 카드 피해 +2.');
+    eq('받는 사격(gun·bow) 피해 −70%', '받는 사격 피해 −70%'); eq('\u3014기물\u3015 통아', '기물 통아'); eq('\u300C\u5FC5\u6B7B\u5247\u751F\u300D', ''); eq('옥사(\u7344\u6B7B)', '옥사');
+    eq('토산을 쌓는다. (2/3)', '토산을 쌓는다. (2/3)'); eq('쇼군 \u8C50\u81E3\u79C0\u5409', '쇼군'); eq('\u300C신은 바다를 압니다.\u300D', '‘신은 바다를 압니다.’'); eq('이억기 (강화)', '이억기 (강화)');
     if (typeof CARDS !== 'undefined' && CARDS.list) CARDS.list.forEach(function (cd) { ['name', 'desc'].forEach(function (k) { if (cd[k] && !clean(cd[k])) errors.push('빈 글: 카드 ' + cd.id + '.' + k); }); });
     if (typeof ENEMIES !== 'undefined' && ENEMIES.list) ENEMIES.list.forEach(function (en) { if (en.name && !clean(en.name)) errors.push('빈 글: 적 ' + en.id); });
     return { ok: errors.length === 0, errors: errors };

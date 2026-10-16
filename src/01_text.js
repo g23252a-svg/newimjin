@@ -107,9 +107,9 @@ var TXT = (function(){ 'use strict';
   function q(s){ return '‘' + s + '’'; }                       // 카드·기물·제목 따옴표
 
   /* ---------------------------------------------------------------- 분류 표 */
-  api.typeName = { atk: '공격', def: '수비', tac: '책략', rep: '장계', edict: '어명' };
+  api.typeName = { atk: '공격', def: '방어', tac: '계책', rep: '장계', edict: '어명' };   // 카드 위 종류 띠(UIBattle.gfx.TYPE_KR)와 같은 말
   api.type = api.typeName;                                      // 옛 이름(한자 한 글자 표는 없앴다)
-  api.pool = { base: '기본', common: '공용', navy: '수군', uibyeong: '의병', tactic: '책략', siege: '수성', ming: '명군', leader: '주장', deputy: '부장', edict: '어명', event: '사건', token: '토큰' };
+  api.pool = { base: '기본', common: '공용', navy: '수군', uibyeong: '의병', tactic: '계책', siege: '수성', ming: '명군', leader: '주장', deputy: '부장', edict: '어명', event: '사건', token: '토큰' };
   api.rarity = { common: '일반', rare: '희귀', special: '특수' };
   api.tag = { shot: '사격', melee: '백병', charge: '돌격', fire: '화공', none: '', pierce: '관통', navy: '수군', uibyeong: '의병', ming: '명군', siege: '수성' };
   api.enemyTag = { ship: '배', gun: '조총', melee: '근접', bow: '활', boss: '장수', elite: '정예', horse: '기마', laborer: '인부', scout: '척후' };
@@ -437,7 +437,7 @@ var TXT = (function(){ 'use strict';
     boss_haengju: function(s){ return '행주에서 권율은 하루에 밀려오는 적을 전부 물리쳤다. 그대는 ' + (s && s.wavesCleared != null ? s.wavesCleared + 1 : 3) + '번의 파도를 ' + nTurn(s) + '턴에 넘겼다.'; },
     boss_jiksan: function(s){ return '직산에서 구로다는 하루 만에 발을 돌렸다. 그대는 ' + nTurn(s) + '턴 만에 길을 막았다.'; },
     boss_myeongnyang: function(s){ return '명량에서 이순신은 열세 척으로 이겼다. 그대는 ' + (s && s.pushes != null ? s.pushes : 0) + '번 적을 밀어내고 ' + nTurn(s) + '턴을 버텼다.'; },
-    boss_noryang: function(s){ return '노량에서 이순신은 마지막 북을 치다 쓰러졌다. 그대는 ' + (s && s.dmgTaken != null ? s.dmgTaken : 0) + '의 피해를 받고도 북을 멈추지 않았다.'; }
+    boss_noryang: function(s){ var d = s && s.dmgTaken != null ? s.dmgTaken : 0; return '노량에서 이순신은 마지막 북을 치다 쓰러졌다. ' + (d > 0 ? '그대는 병력을 ' + d + ' 잃고도 북을 멈추지 않았다.' : '그대는 병력 하나 잃지 않고 북을 울렸다.'); }
   };
 
   /* ---------------------------------------------------------------- 전투 로그 */
@@ -487,7 +487,7 @@ var TXT = (function(){ 'use strict';
     newRun: '새 게임', resume: '이어하기', settings: '설정', deck: '덱 보기', title: '처음 화면', start: '시작', chooseLeader: '주장 선택', leaderSelect: '주장을 고르세요',
     buy: '구매', leave: '나가기', remove: '카드 버리기', removeDone: '이미 한 장을 버렸다', sold: '판매 완료', price: '군량', shopHead: '시장',
     rest: '휴식', train: '훈련', farm: '농사', campHead: '군영',
-    report: '장계 올리기', recruit: '장수 영입', request: '명군 요청', decline: '거절', courtHead: '조정', requestLocked: '명군은 3막부터 요청할 수 있다', slotFull: '자리가 찼다. 누구와 바꿀까?',
+    report: '장계 올리기', recruit: '장수 영입', request: '명군 요청', decline: '거절', accept: '받아들이기', courtHead: '조정', requestLocked: '명군은 3막부터 요청할 수 있다', slotFull: '자리가 찼다. 누구와 바꿀까?',
     hp: '병력', maxHp: '최대 병력', energy: '군령', ration: '군량', suspicion: '의심', block: '진형', wall: '성벽', score: '점수', turn: '턴', dist: '거리',
     drawPile: '뽑을 카드', discardPile: '버린 카드', exhaustPile: '소모', hand: '손', cost: '군령', upgrade: '강화', upgraded: '강화됨', pick: '선택', picked: '선택함',
     reward: '전리품', rewardHead: '카드 한 장을 고르거나 건너뛰세요', relicGet: '기물을 얻었다', rationGet: '군량을 얻었다', skipBonus: '건너뛰면 군량 +' + B.RATION_SKIP,
